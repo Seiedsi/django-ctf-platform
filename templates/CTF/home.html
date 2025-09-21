@@ -1,0 +1,10 @@
+{% extends 'CTF/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="jumbotron">
+        <h1 class="display-4 text-center heading-font">Welcome Contestant</h1>
+        <p class="lead text-center primary-font">"A hands-on CTF platform focused on web vulnerabilities. Learn by doing, because the best way to defend is to understand how attacks work."</p>
+        <div class="text-center"><a href="{% url 'register' %}" class="btn btn-primary btn-lg my-4 primary-font" role="button">GET STARTED</a>
+        </div>
+    </div>
+{% endblock %}

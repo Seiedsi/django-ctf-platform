@@ -1,0 +1,12 @@
+{% extends 'CTF/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h1 class="display-4 text-center heading-font">Access Granted... Welcome "{{user.username}}"</h1>
+        <p class="lead text-center primary-font">"Step Into the Hacker’s Playground.
+Discover, exploit, and secure web vulnerabilities in a safe, legal environment. Our challenges mimic real-world flaws—perfect for learning, practicing, or competing. Ready to test your skills?"</p>
+        <div class="text-center"><a href="{% url 'challenge_list' %}" class="btn btn-primary btn-lg my-4 primary-font" role="button">LET'S START</a>
+        </div>
+    </div>
+{% endblock %}

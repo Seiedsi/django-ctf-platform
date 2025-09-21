@@ -1,0 +1,49 @@
+{% extends 'CTF/base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container my-5">
+  <h2 class="mb-4">Welcome, {{ user.username }}</h2>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <div>
+      <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">Logout</a>
+
+        <a href="{% url 'edit_profile' %}" class="btn btn-light btn-sm">Edit Profile</a>
+    </div>
+  </div>
+
+  <h5>Total Points: {{ total_points }} | Rank: #{{ rank }}</h5>
+
+  <h4 class="mt-4">Completed CTF Challenges</h4>
+  <table class="table table-bordered table-striped">
+    <thead><tr><th>Title</th><th>Points</th><th>Date Completed</th></tr></thead>
+    <tbody>
+      {% for log in logs %}
+        <tr>
+          <td>{{ log.challenge.title }}</td>
+          <td>{{ log.challenge.points }}</td>
+          <td>{{ log.completed_at }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="3">No challenges completed yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h4 class="mt-5">Top 10 Leaderboard</h4>
+  <table class="table table-hover">
+    <thead><tr><th>Rank</th><th>Username</th><th>Points</th></tr></thead>
+    <tbody>
+      {% for entry in leaderboard %}
+        <tr {% if entry.0.username == user.username %}class="table-warning"{% endif %}>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ entry.0.username }}</td>
+          <td>{{ entry.1 }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

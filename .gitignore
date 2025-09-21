@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# Django
+/staticfiles/
+/media/
+/db.sqlite3
+
+# Environment
+.env
+*.env
+
+# Docker temp
+docker-compose.temp_*.yml
+ctf_temp_compose/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

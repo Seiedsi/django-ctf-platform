@@ -1,0 +1,115 @@
+{% extends 'CTF/base.html' %}
+{% load static %}
+{% load challenge_extras %}
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4 primary-font">{{ challenge.title }}</h1>
+
+  <div class="mb-3">
+    <strong class="h4 primary-font">Description:</strong>
+    <p>{{ challenge.description }}</p>
+  </div>
+
+  <div class="mb-3">
+    <strong class="h4 primary-font">Difficulty:</strong> {{ challenge.get_difficulty_display }}<br>
+  </div>
+  <div class="mb-3">
+    <strong class="h4 primary-font">Type:</strong> {{ challenge.type }}<br>
+  </div>
+
+  {% with 'assets/'|add:challenge.title|get_static_files as static_files %}
+    {% if static_files %}
+      <div class="mb-4">
+        <h4 class="primary-font">Challenge Files:</h4>
+        <ul>
+          {% for file in static_files %}
+            <li><a href="{% static file %}" download>{{ file|basename }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% else %}
+      <div class="mb-4">
+        {% if challenge.is_isolated %}
+          {% if active_container %}
+            <a href="http://127.0.0.1:{{ active_container.host_port }}" target="_blank" class="btn btn-success">
+              Open Your Challenge Instance
+            </a>
+            <a href="{% url 'stop_challenge' challenge.pk %}" class="btn btn-danger">Stop My Instance</a>
+          {% else %}
+            <button id="launch-btn"
+                    class="btn btn-primary"
+                    data-url="{% url 'spawn_challenge' challenge.pk %}">
+              Launch Isolated Challenge
+            </button>
+            <div id="loading-msg" class="mt-2 text-muted" style="display:none">
+              Launching... please wait.
+            </div>
+            <a id="challenge-anchor"
+             href="http://127.0.0.1:{{ active_container.host_port }}"
+             style="display:none"
+             target="_blank">
+             Go to Challenge
+          </a>
+          {% endif %}
+        {% else %}
+          <button id="launch-btn"
+                  class="btn btn-primary"
+                  data-url="{% url 'spawn_challenge' challenge.pk %}">
+            Launch Shared Instance
+          </button>
+          <div id="loading-msg" class="mt-2 text-muted" style="display:none">
+            Launching... please wait.
+          </div>
+          <a id="challenge-anchor"
+             href="http://127.0.0.1:{{ challenge.host_port }}"
+             style="display:none"
+             target="_blank">
+             Go to Challenge
+          </a>
+          <p class="text-muted mt-2">⚠ This challenge is shared among all users.</p>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="flag" class="form-label">Submit Flag</label>
+      <input type="text" name="flag" id="flag" class="form-control" placeholder="Enter flag here" {% if already_completed %}disabled{% endif %}>
+    </div>
+    <button type="submit" class="btn btn-success" {% if already_completed %}disabled{% endif %}>Submit</button>
+  </form>
+
+  {% if message %}
+    <div class="alert alert-info mt-3">{{ message }}</div>
+  {% endif %}
+
+  <a href="{% url 'challenge_list' %}" class="btn btn-secondary mt-4">Back to Challenge List</a>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const btn = document.getElementById("launch-btn");
+  const msg = document.getElementById("loading-msg");
+  const anchor = document.getElementById("challenge-anchor");
+
+  if (btn) {
+    btn.addEventListener("click", function () {
+      btn.style.display = "none";
+      msg.style.display = "block";
+
+      // Start container by calling backend
+      fetch(btn.dataset.url, { method: "GET" })
+        .then(() => {
+          msg.style.display = "none";
+          anchor.style.display = "inline-block";
+        })
+        .catch(() => {
+          msg.innerText = "Error launching container.";
+        });
+    });
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,47 @@
+.jumbotron {
+    padding: 30px 30px;
+    margin: 60px 10px;
+    background: radial-gradient(
+    circle at center,
+    #131021 30%,
+    #000000 70%);
+    border-radius: 0.3rem;
+}
+.primary-font {
+    font-family: 'Courier Prime';
+     font-weight: 400;
+}
+
+.heading-font{
+    font-family: 'VT323';
+     font-weight: 400;
+}
+
+.theme {
+    background: radial-gradient(
+    circle at center,
+    #131021 30%,
+    #000000 70%);}
+
+/* static/css/styles.css */
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.step-links a {
+    color: #007bff;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    margin: 0 4px;
+}
+
+.step-links a:hover {
+    background-color: #f8f9fa;
+}
+
+.current {
+    padding: 8px 16px;
+}
